@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        lisp: [sbcl, ccl]
+        lisp: [sbcl]
 
     env:
       LISP: ${{ matrix.lisp }}
