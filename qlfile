@@ -1,5 +1,6 @@
 dist ultralisp http://dist.ultralisp.org/
-github dexador fukamachi/dexador
-github yason phmarek/yason
-github str vindarel/cl-str
-github rove fukamachi/rove
+github fukamachi/dexador
+github phmarek/yason
+github vindarel/cl-str
+github Shinmera/dissect
+github fukamachi/rove
