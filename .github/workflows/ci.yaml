@@ -20,4 +20,7 @@ jobs:
       - name: Build a Docker image
         run: docker build -t visualcrossing-test -f tests/Dockerfile .
       - name: Run tests
-        run: docker run --rm visualcrossing-test
+        run: |
+          docker run --rm \
+            -e TEST_VISUAL_CROSSING_WEATHER_API_KEY="${{ secrets.TEST_VISUAL_CROSSING_WEATHER_API_KEY }}" \
+            visualcrossing-test
