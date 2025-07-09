@@ -14,42 +14,55 @@
            #:weather-response-days
            #:weather-response-current-conditions
            #:weather-response-alerts
+           #:weather-datetime
+           #:weather-datetime-epoch
+           #:weather-temp
+           #:weather-feelslike
+           #:weather-humidity
+           #:weather-precip
+           #:weather-precipprob
+           #:weather-preciptype
+           #:weather-snow
+           #:weather-snowdepth
+           #:weather-windgust
+           #:weather-windspeed
+           #:weather-winddir
+           #:weather-pressure
+           #:weather-cloudover
+           #:weather-visibility
+           #:weather-uvindex
+           #:weather-conditions
+           #:weather-description
+           #:weather-icon
            #:weather-day
            #:make-weather-day
            #:weather-day-p
-           #:weather-day-datetime
-           #:weather-day-temp
            #:weather-day-tempmax
            #:weather-day-tempmin
-           #:weather-day-humidity
-           #:weather-day-precip
-           #:weather-day-conditions
-           #:weather-day-description
+           #:weather-day-feelslikemax
+           #:weather-day-feelslikemin
+           #:weather-day-precipcover
+           #:weather-day-sunrise
+           #:weather-day-sunset
+           #:weather-day-moonphase
            #:weather-day-hours
            #:weather-hour
            #:make-weather-hour
            #:weather-hour-p
-           #:weather-hour-datetime
-           #:weather-hour-temp
-           #:weather-hour-humidity
-           #:weather-hour-precip
-           #:weather-hour-conditions
-           #:weather-hour-description
            #:current-conditions
            #:make-current-conditions
            #:current-conditions-p
-           #:current-conditions-datetime
-           #:current-conditions-temp
-           #:current-conditions-humidity
-           #:current-conditions-precip
-           #:current-conditions-conditions
-           #:current-conditions-description
            #:weather-alert
            #:make-weather-alert
            #:weather-alert-p
            #:weather-alert-event
+           #:weather-alert-headline
            #:weather-alert-description
            #:weather-alert-severity
+           #:weather-alert-areas
+           #:weather-alert-onset
+           #:weather-alert-expires
+           #:weather-alert-effective
            #:parse-weather-response
            #:parse-weather-day
            #:parse-weather-hour
@@ -70,19 +83,17 @@
   current-conditions
   alerts)
 
-(defstruct weather-day
+(defstruct (weather-base (:constructor nil)
+                         (:predicate nil)
+                         (:copier nil)
+                         (:conc-name weather-))
   datetime
-  datetimeepoch
+  datetime-epoch
   temp
-  tempmax
-  tempmin
   feelslike
-  feelslikemax
-  feelslikemin
   humidity
   precip
   precipprob
-  precipcover
   preciptype
   snow
   snowdepth
@@ -95,55 +106,22 @@
   uvindex
   conditions
   description
-  icon
+  icon)
+
+(defstruct (weather-day (:include weather-base))
+  tempmax
+  tempmin
+  feelslikemax
+  feelslikemin
+  precipcover
   sunrise
   sunset
   moonphase
   hours)
 
-(defstruct weather-hour
-  datetime
-  datetimeepoch
-  temp
-  feelslike
-  humidity
-  precip
-  precipprob
-  preciptype
-  snow
-  snowdepth
-  windgust
-  windspeed
-  winddir
-  pressure
-  cloudcover
-  visibility
-  uvindex
-  conditions
-  description
-  icon)
+(defstruct (weather-hour (:include weather-base)))
 
-(defstruct current-conditions
-  datetime
-  datetimeepoch
-  temp
-  feelslike
-  humidity
-  precip
-  precipprob
-  preciptype
-  snow
-  snowdepth
-  windgust
-  windspeed
-  winddir
-  pressure
-  cloudcover
-  visibility
-  uvindex
-  conditions
-  description
-  icon)
+(defstruct (current-conditions (:include weather-base)))
 
 (defstruct weather-alert
   event
@@ -185,7 +163,7 @@
   "Parse JSON day data into weather-day structure."
   (make-weather-day
    :datetime (get-json-value "datetime" day-data)
-   :datetimeepoch (get-json-value "datetimeEpoch" day-data)
+   :datetime-epoch (get-json-value "datetimeEpoch" day-data)
    :temp (get-json-value "temp" day-data)
    :tempmax (get-json-value "tempmax" day-data)
    :tempmin (get-json-value "tempmin" day-data)
@@ -219,7 +197,7 @@
   "Parse JSON hour data into weather-hour structure."
   (make-weather-hour
    :datetime (get-json-value "datetime" hour-data)
-   :datetimeepoch (get-json-value "datetimeEpoch" hour-data)
+   :datetime-epoch (get-json-value "datetimeEpoch" hour-data)
    :temp (get-json-value "temp" hour-data)
    :feelslike (get-json-value "feelslike" hour-data)
    :humidity (get-json-value "humidity" hour-data)
@@ -243,7 +221,7 @@
   "Parse JSON current conditions data into current-conditions structure."
   (make-current-conditions
    :datetime (get-json-value "datetime" cc-data)
-   :datetimeepoch (get-json-value "datetimeEpoch" cc-data)
+   :datetime-epoch (get-json-value "datetimeEpoch" cc-data)
    :temp (get-json-value "temp" cc-data)
    :feelslike (get-json-value "feelslike" cc-data)
    :humidity (get-json-value "humidity" cc-data)
