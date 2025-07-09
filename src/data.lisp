@@ -29,7 +29,7 @@
            #:weather-windspeed
            #:weather-winddir
            #:weather-pressure
-           #:weather-cloudover
+           #:weather-cloudcover
            #:weather-visibility
            #:weather-solarradiation
            #:weather-solarenergy
