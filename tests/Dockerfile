@@ -20,4 +20,4 @@ COPY . .
 COPY --from=build-env /app/.qlot /app/.qlot
 
 ENTRYPOINT ["sbcl", "--noinform", "--non-interactive"]
-CMD ["--load", ".qlot/setup.lisp", "--eval", "(ql:quickload (list :visualcrossing/tests :rove))", "--eval", "(rove:run :visualcrossing/tests)"]
+CMD ["--load", ".qlot/setup.lisp", "--eval", "(ql:quickload (list :visualcrossing/tests :rove))", "--eval", "(or (rove:run :visualcrossing/tests) (uiop:quit -1))"]
