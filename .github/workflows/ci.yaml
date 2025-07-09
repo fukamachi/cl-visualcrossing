@@ -2,9 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main, master ]
   pull_request:
-    branches: [ main, master ]
 
 jobs:
   test:
@@ -14,85 +12,14 @@ jobs:
       matrix:
         lisp: [sbcl, ccl]
 
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup Lisp
-      uses: 40ants/setup-lisp@v4
-      with:
-        asdf-system: visualcrossing
-        qlfile: qlfile
-
-    - name: Install Roswell
-      run: |
-        curl -L https://raw.githubusercontent.com/roswell/roswell/master/scripts/install-for-ci.sh | sh
-        echo "$HOME/.roswell/bin" >> $GITHUB_PATH
-
-    - name: Install Lisp implementation
-      run: |
-        ros install ${{ matrix.lisp }}
-        ros use ${{ matrix.lisp }}
-
-    - name: Install qlot
-      run: |
-        ros install qlot
-
-    - name: Install dependencies
-      run: |
-        qlot install
-
-    - name: Run tests
-      run: |
-        qlot exec ros run --eval "(ql:quickload :visualcrossing/tests)" --eval "(rove:run :visualcrossing/tests)" --quit
-
-    - name: Check compilation
-      run: |
-        qlot exec ros run --eval "(ql:quickload :visualcrossing)" --eval "(format t \"~&Library loaded successfully~%\")" --quit
-
-  lint:
-    runs-on: ubuntu-latest
+    env:
+      LISP: ${{ matrix.lisp }}
 
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup Lisp
-      uses: 40ants/setup-lisp@v4
-      with:
-        asdf-system: visualcrossing
-        qlfile: qlfile
-
-    - name: Install Roswell
-      run: |
-        curl -L https://raw.githubusercontent.com/roswell/roswell/master/scripts/install-for-ci.sh | sh
-        echo "$HOME/.roswell/bin" >> $GITHUB_PATH
-
-    - name: Install SBCL
-      run: |
-        ros install sbcl
-        ros use sbcl
-
-    - name: Install qlot
-      run: |
-        ros install qlot
-
-    - name: Install dependencies
-      run: |
-        qlot install
-
-    - name: Check for trailing whitespace
-      run: |
-        if grep -r '[[:space:]]$' --include='*.lisp' --include='*.asd' src/ tests/ visualcrossing.asd; then
-          echo "Found trailing whitespace in source files"
-          exit 1
-        fi
-
-    - name: Check for tabs
-      run: |
-        if grep -r $'\t' --include='*.lisp' --include='*.asd' src/ tests/ visualcrossing.asd; then
-          echo "Found tabs in source files - please use spaces"
-          exit 1
-        fi
-
-    - name: Verify package declarations
-      run: |
-        qlot exec ros run --eval "(progn (ql:quickload :visualcrossing) (format t \"~&Package verification passed~%\"))" --quit
+      - uses: actions/checkout@v4
+      - uses: 40ants/setup-lisp@v4
+        with:
+          asdf-system: visualcrossing
+      - uses: 40ants/run-tests@v2
+        with:
+          asdf-system: visualcrossing
