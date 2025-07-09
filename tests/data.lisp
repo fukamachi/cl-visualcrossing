@@ -146,8 +146,8 @@
     (let ((response (parse-weather-response *sample-json-response*)))
       (ok (weather-response-p response))
       (ok (= (weather-response-query-cost response) 1))
-      (ok (= (weather-response-latitude response) 40.7146))
-      (ok (= (weather-response-longitude response) -74.0071))
+      (ok (= (weather-response-latitude response) 40.7146d0))
+      (ok (= (weather-response-longitude response) -74.0071d0))
       (ok (string= (weather-response-resolved-address response) "New York, NY, United States"))
       (ok (string= (weather-response-address response) "New York, NY"))
       (ok (string= (weather-response-timezone response) "America/New_York"))
@@ -157,10 +157,10 @@
       (let ((day (first (weather-response-days response))))
         (ok (weather-day-p day))
         (ok (string= (weather-day-datetime day) "2025-07-08"))
-        (ok (= (weather-day-temp day) 84.5))
-        (ok (= (weather-day-tempmax day) 94.4))
-        (ok (= (weather-day-tempmin day) 77.2))
-        (ok (= (weather-day-humidity day) 65.9))
+        (ok (= (weather-day-temp day) 84.5d0))
+        (ok (= (weather-day-tempmax day) 94.4d0))
+        (ok (= (weather-day-tempmin day) 77.2d0))
+        (ok (= (weather-day-humidity day) 65.9d0))
         (ok (string= (weather-day-conditions day) "Partly cloudy"))
 
         ;; Test hours data
@@ -168,15 +168,15 @@
         (let ((hour (first (weather-day-hours day))))
           (ok (weather-hour-p hour))
           (ok (string= (weather-hour-datetime hour) "00:00:00"))
-          (ok (= (weather-hour-temp hour) 79.5))
-          (ok (= (weather-hour-humidity hour) 68.0))))
+          (ok (= (weather-hour-temp hour) 79.5d0))
+          (ok (= (weather-hour-humidity hour) 68.0d0))))
 
       ;; Test current conditions
       (ok (current-conditions-p (weather-response-current-conditions response)))
       (let ((current (weather-response-current-conditions response)))
         (ok (string= (current-conditions-datetime current) "15:21:00"))
-        (ok (= (current-conditions-temp current) 89.8))
-        (ok (= (current-conditions-humidity current) 59.0))
+        (ok (= (current-conditions-temp current) 89.8d0))
+        (ok (= (current-conditions-humidity current) 59.0d0))
         (ok (string= (current-conditions-conditions current) "Partly cloudy"))))))
 
 (deftest parse-weather-alert-test

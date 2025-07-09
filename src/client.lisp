@@ -33,7 +33,7 @@
   "Get API key from parameter, dynamic variable, or environment variable."
   (or provided-key
       *api-key*
-      (uiop:getenv "VISUAL_CROSSING_WEATHER_API_KEY")
+      (uiop:getenvp "VISUAL_CROSSING_WEATHER_API_KEY")
       (error 'errors:authentication-error
              :message "No API key provided. Set VISUAL_CROSSING_WEATHER_API_KEY environment variable or *api-key* dynamic variable")))
 

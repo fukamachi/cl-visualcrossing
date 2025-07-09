@@ -1,6 +1,7 @@
 (defpackage #:visualcrossing/tests/client
   (:use #:cl
-        #:rove)
+        #:rove
+        #:visualcrossing/tests/utils)
   (:import-from #:visualcrossing/client
                 #:*api-key*
                 #:*base-url*
@@ -14,32 +15,16 @@
 (deftest api-key-configuration
   (testing "API key configuration"
     (testing "Dynamic variable"
-      (let ((original-key *api-key*))
-        (unwind-protect
-             (progn
-               (setf *api-key* "test-key")
-               (ok (string= (get-api-key) "test-key")))
-          (setf *api-key* original-key))))
+      (with-test-api-key ("test-key")
+        (ok (string= (get-api-key) "test-key"))))
 
     (testing "Provided key overrides"
-      (let ((original-key *api-key*))
-        (unwind-protect
-             (progn
-               (setf *api-key* "dynamic-key")
-               (ok (string= (get-api-key "provided-key") "provided-key")))
-          (setf *api-key* original-key))))
+      (with-test-api-key ("dynamic-key")
+        (ok (string= (get-api-key "provided-key") "provided-key"))))
 
     (testing "No API key available"
-      (let ((original-key *api-key*)
-            (original-env (uiop:getenv "VISUAL_CROSSING_WEATHER_API_KEY")))
-        (unwind-protect
-             (progn
-               (setf *api-key* nil)
-               (setf (uiop:getenv "VISUAL_CROSSING_WEATHER_API_KEY") nil)
-               (ok (signals (get-api-key) 'visualcrossing/errors:authentication-error)))
-          (setf *api-key* original-key)
-          (when original-env
-            (setf (uiop:getenv "VISUAL_CROSSING_WEATHER_API_KEY") original-env)))))))
+      (with-test-api-key ("")
+        (ok (signals (get-api-key) 'visualcrossing/errors:authentication-error))))))
 
 (deftest build-url-test
   (testing "URL building"

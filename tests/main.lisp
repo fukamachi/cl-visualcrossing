@@ -1,6 +1,7 @@
 (defpackage #:visualcrossing/tests/main
   (:use #:cl
-        #:rove)
+        #:rove
+        #:visualcrossing/tests/utils)
   (:import-from #:visualcrossing
                 #:*api-key*
                 #:timeline-weather
@@ -14,17 +15,7 @@
   "{\"queryCost\":1,\"latitude\":40.7146,\"longitude\":-74.0071,\"resolvedAddress\":\"New York, NY, United States\",\"address\":\"New York, NY\",\"timezone\":\"America/New_York\",\"tzoffset\":-4.0,\"description\":\"Similar temperatures continuing with no rain expected.\",\"days\":[{\"datetime\":\"2025-07-08\",\"datetimeEpoch\":1751947200,\"tempmax\":94.4,\"tempmin\":77.2,\"temp\":84.5,\"feelslikemax\":99.8,\"feelslikemin\":77.2,\"feelslike\":87.7,\"dew\":70.8,\"humidity\":65.9,\"precip\":0.028,\"precipprob\":59.0,\"precipcover\":8.33,\"preciptype\":[\"rain\"],\"snow\":0.0,\"snowdepth\":0.0,\"windgust\":15.7,\"windspeed\":8.7,\"winddir\":248.0,\"pressure\":30.02,\"cloudcover\":65.4,\"visibility\":9.9,\"uvindex\":7.0,\"severerisk\":10.0,\"conditions\":\"Partly cloudy\",\"description\":\"Partly cloudy throughout the day.\",\"icon\":\"partly-cloudy-day\",\"stations\":null,\"source\":\"fcst\",\"sunrise\":\"05:30:59\",\"sunset\":\"20:14:27\",\"moonphase\":0.38,\"currentConditions\":{\"datetime\":\"15:21:00\",\"datetimeEpoch\":1751982060,\"temp\":89.8,\"feelslike\":94.6,\"humidity\":59.0,\"dew\":72.3,\"precip\":0.0,\"precipprob\":0.0,\"snow\":0.0,\"snowdepth\":0.0,\"preciptype\":null,\"windgust\":10.1,\"windspeed\":6.9,\"winddir\":270.0,\"pressure\":29.98,\"visibility\":10.0,\"cloudcover\":75.0,\"uvindex\":6.0,\"conditions\":\"Partly cloudy\",\"icon\":\"partly-cloudy-day\",\"stations\":[\"KJFK\",\"KLGA\",\"KNYC\",\"KTEB\"],\"source\":\"obs\"},\"hours\":[{\"datetime\":\"00:00:00\",\"datetimeEpoch\":1751892000,\"temp\":79.5,\"feelslike\":79.5,\"humidity\":68.0,\"dew\":68.8,\"precip\":0.0,\"precipprob\":0.0,\"snow\":0.0,\"snowdepth\":0.0,\"preciptype\":null,\"windgust\":12.3,\"windspeed\":6.5,\"winddir\":255.0,\"pressure\":30.08,\"visibility\":10.0,\"cloudcover\":45.0,\"uvindex\":0.0,\"conditions\":\"Partly cloudy\",\"icon\":\"partly-cloudy-night\",\"stations\":[\"KJFK\",\"KLGA\",\"KNYC\",\"KTEB\"],\"source\":\"obs\"}]}]}")
 
 (deftest test-api-key-exists
-  (ok (uiop:getenv "TEST_VISUAL_CROSSING_WEATHER_API_KEY")))
-
-(defmacro with-test-api-key ((&optional api-key) &body body)
-  (let ((original-key (gensym "ORIGINAL-KEY")))
-    `(let ((*api-key* ,(or api-key '(uiop:getenv "TEST_VISUAL_CROSSING_WEATHER_API_KEY"))))
-       (let ((,original-key (uiop:getenv "VISUAL_CROSSING_WEATHER_API_KEY")))
-         (unwind-protect
-              (progn
-                (setf (uiop:getenv "VISUAL_CROSSING_WEATHER_API_KEY") *api-key*)
-                ,@body)
-           (setf (uiop:getenv "VISUAL_CROSSING_WEATHER_API_KEY") ,original-key))))))
+  (ok (uiop:getenvp "TEST_VISUAL_CROSSING_WEATHER_API_KEY")))
 
 (deftest function-signatures
   (testing "Function signatures"
@@ -75,7 +66,7 @@
           (ok (string= (visualcrossing/data:weather-day-conditions day) "Partly cloudy")))
 
         (let ((current (visualcrossing/data:weather-response-current-conditions response)))
-          (ok (= (visualcrossing/data:current-conditions-temp current) 89.8))
+          (ok (= (visualcrossing/data:current-conditions-temp current) 89.8d0))
           (ok (string= (visualcrossing/data:current-conditions-conditions current) "Partly cloudy")))))))
 
 (deftest keyword-argument-handling
