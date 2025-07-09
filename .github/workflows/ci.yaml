@@ -17,20 +17,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Install Roswell
-        env:
-          LISP: ${{ matrix.lisp }}
-        run: |
-          curl -L https://raw.githubusercontent.com/roswell/roswell/master/scripts/install-for-ci.sh | sh
-      - name: Install Qlot
-        run: ros install fukamachi/qlot
-      - name: Install Rove
-        run: ros install fukamachi/rove
-      - name: Run qlot install
-        run: |
-          PATH="~/.roswell/bin:$PATH"
-          qlot install
+      - name: Build a Docker image
+        run: docker build -t visualcrossing-test -f tests/Dockerfile .
       - name: Run tests
-        run: |
-          PATH="~/.roswell/bin:$PATH"
-          qlot exec rove visualcrossing.asd
+        run: docker run --rm visualcrossing-test
