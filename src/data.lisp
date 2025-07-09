@@ -18,6 +18,7 @@
            #:weather-datetime-epoch
            #:weather-temp
            #:weather-feelslike
+           #:weather-dew
            #:weather-humidity
            #:weather-precip
            #:weather-precipprob
@@ -30,10 +31,14 @@
            #:weather-pressure
            #:weather-cloudover
            #:weather-visibility
+           #:weather-solarradiation
+           #:weather-solarenergy
            #:weather-uvindex
            #:weather-conditions
            #:weather-description
            #:weather-icon
+           #:weather-stations
+           #:weather-source
            #:weather-day
            #:make-weather-day
            #:weather-day-p
@@ -41,9 +46,14 @@
            #:weather-day-tempmin
            #:weather-day-feelslikemax
            #:weather-day-feelslikemin
+           #:weather-day-windspeedmax
+           #:weather-day-windspeedmean
+           #:weather-day-windspeedmin
            #:weather-day-precipcover
            #:weather-day-sunrise
+           #:weather-day-sunrise-epoch
            #:weather-day-sunset
+           #:weather-day-sunset-epoch
            #:weather-day-moonphase
            #:weather-day-hours
            #:weather-hour
@@ -91,6 +101,7 @@
   datetime-epoch
   temp
   feelslike
+  dew
   humidity
   precip
   precipprob
@@ -103,19 +114,28 @@
   pressure
   cloudcover
   visibility
+  solarradiation
+  solarenergy
   uvindex
   conditions
   description
-  icon)
+  icon
+  stations
+  source)
 
 (defstruct (weather-day (:include weather-base))
   tempmax
   tempmin
   feelslikemax
   feelslikemin
+  windspeedmax
+  windspeedmean
+  windspeedmin
   precipcover
   sunrise
+  sunrise-epoch
   sunset
+  sunset-epoch
   moonphase
   hours)
 
@@ -170,6 +190,7 @@
    :feelslike (get-json-value "feelslike" day-data)
    :feelslikemax (get-json-value "feelslikemax" day-data)
    :feelslikemin (get-json-value "feelslikemin" day-data)
+   :dew (get-json-value "dew" day-data)
    :humidity (get-json-value "humidity" day-data)
    :precip (get-json-value "precip" day-data)
    :precipprob (get-json-value "precipprob" day-data)
@@ -179,19 +200,28 @@
    :snowdepth (get-json-value "snowdepth" day-data)
    :windgust (get-json-value "windgust" day-data)
    :windspeed (get-json-value "windspeed" day-data)
+   :windspeedmax (get-json-value "windspeedmax" day-data)
+   :windspeedmean (get-json-value "windspeedmean" day-data)
+   :windspeedmin (get-json-value "windspeedmin" day-data)
    :winddir (get-json-value "winddir" day-data)
    :pressure (get-json-value "pressure" day-data)
    :cloudcover (get-json-value "cloudcover" day-data)
    :visibility (get-json-value "visibility" day-data)
+   :solarradiation (get-json-value "solarradiation" day-data)
+   :solarenergy (get-json-value "solarenergy" day-data)
    :uvindex (get-json-value "uvindex" day-data)
    :conditions (get-json-value "conditions" day-data)
    :description (get-json-value "description" day-data)
    :icon (get-json-value "icon" day-data)
    :sunrise (get-json-value "sunrise" day-data)
+   :sunrise-epoch (get-json-value "sunriseEpoch" day-data)
    :sunset (get-json-value "sunset" day-data)
+   :sunset-epoch (get-json-value "sunsetEpoch" day-data)
    :moonphase (get-json-value "moonphase" day-data)
    :hours (let ((hours (get-json-value "hours" day-data)))
-            (when hours (mapcar #'parse-weather-hour hours)))))
+            (when hours (mapcar #'parse-weather-hour hours)))
+   :stations (get-json-value "stations" day-data)
+   :source (get-json-value "source" day-data)))
 
 (defun parse-weather-hour (hour-data)
   "Parse JSON hour data into weather-hour structure."
@@ -200,6 +230,7 @@
    :datetime-epoch (get-json-value "datetimeEpoch" hour-data)
    :temp (get-json-value "temp" hour-data)
    :feelslike (get-json-value "feelslike" hour-data)
+   :dew (get-json-value "dew" hour-data)
    :humidity (get-json-value "humidity" hour-data)
    :precip (get-json-value "precip" hour-data)
    :precipprob (get-json-value "precipprob" hour-data)
@@ -212,10 +243,14 @@
    :pressure (get-json-value "pressure" hour-data)
    :cloudcover (get-json-value "cloudcover" hour-data)
    :visibility (get-json-value "visibility" hour-data)
+   :solarradiation (get-json-value "solarradiation" hour-data)
+   :solarenergy (get-json-value "solarenergy" hour-data)
    :uvindex (get-json-value "uvindex" hour-data)
    :conditions (get-json-value "conditions" hour-data)
    :description (get-json-value "description" hour-data)
-   :icon (get-json-value "icon" hour-data)))
+   :icon (get-json-value "icon" hour-data)
+   :stations (get-json-value "stations" hour-data)
+   :source (get-json-value "source" hour-data)))
 
 (defun parse-current-conditions (cc-data)
   "Parse JSON current conditions data into current-conditions structure."
@@ -224,6 +259,7 @@
    :datetime-epoch (get-json-value "datetimeEpoch" cc-data)
    :temp (get-json-value "temp" cc-data)
    :feelslike (get-json-value "feelslike" cc-data)
+   :dew (get-json-value "dew" cc-data)
    :humidity (get-json-value "humidity" cc-data)
    :precip (get-json-value "precip" cc-data)
    :precipprob (get-json-value "precipprob" cc-data)
@@ -236,10 +272,14 @@
    :pressure (get-json-value "pressure" cc-data)
    :cloudcover (get-json-value "cloudcover" cc-data)
    :visibility (get-json-value "visibility" cc-data)
+   :solarradiation (get-json-value "solarradiation" cc-data)
+   :solarenergy (get-json-value "solarenergy" cc-data)
    :uvindex (get-json-value "uvindex" cc-data)
    :conditions (get-json-value "conditions" cc-data)
    :description (get-json-value "description" cc-data)
-   :icon (get-json-value "icon" cc-data)))
+   :icon (get-json-value "icon" cc-data)
+   :stations (get-json-value "stations" cc-data)
+   :source (get-json-value "source" cc-data)))
 
 (defun parse-weather-alert (alert-data)
   "Parse JSON alert data into weather-alert structure."
