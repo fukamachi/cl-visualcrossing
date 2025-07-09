@@ -1,5 +1,7 @@
 (defpackage #:visualcrossing/tests/utils
   (:use #:cl)
+  (:import-from #:visualcrossing
+                #:*api-key*)
   (:export #:with-test-api-key))
 (in-package #:visualcrossing/tests/utils)
 

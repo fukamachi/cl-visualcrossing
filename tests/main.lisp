@@ -62,12 +62,12 @@
         (ok (not (null (visualcrossing/data:weather-response-current-conditions response))))
 
         (let ((day (first (visualcrossing/data:weather-response-days response))))
-          (ok (= (visualcrossing/data:weather-day-temp day) 84.5))
-          (ok (string= (visualcrossing/data:weather-day-conditions day) "Partly cloudy")))
+          (ok (= (visualcrossing/data:weather-temp day) 84.5))
+          (ok (string= (visualcrossing/data:weather-conditions day) "Partly cloudy")))
 
         (let ((current (visualcrossing/data:weather-response-current-conditions response)))
-          (ok (= (visualcrossing/data:current-conditions-temp current) 89.8d0))
-          (ok (string= (visualcrossing/data:current-conditions-conditions current) "Partly cloudy")))))))
+          (ok (= (visualcrossing/data:weather-temp current) 89.8d0))
+          (ok (string= (visualcrossing/data:weather-conditions current) "Partly cloudy")))))))
 
 (deftest keyword-argument-handling
   (testing "Keyword argument handling"
