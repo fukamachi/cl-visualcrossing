@@ -14,18 +14,18 @@
 (in-package #:visualcrossing)
 
 (defun timeline-weather (location &key
-                         (start-date nil)
-                         (end-date nil)
-                         (unit-group :us)
-                         (include-hours t)
-                         (include-current t)
-                         (include-alerts t)
-                         (elements nil)
-                         (timezone nil)
-                         (icon-set :icons1)
-                         (lang :en)
-                         (content-type :json)
-                         (api-key nil))
+                                    (start-date nil)
+                                    (end-date nil)
+                                    (unit-group :metric)
+                                    include-hours
+                                    include-current
+                                    include-alerts
+                                    (elements nil)
+                                    (timezone nil)
+                                    (icon-set :icons1)
+                                    (lang :en)
+                                    (content-type :json)
+                                    (api-key nil))
   "Retrieve weather data for a location using the Timeline API.
 
   Parameters:
@@ -65,16 +65,16 @@
         response)))
 
 (defun timeline-weather-multi (locations &key
-                               (start-date nil)
-                               (end-date nil)
-                               (unit-group :us)
-                               (include-hours t)
-                               (elements nil)
-                               (timezone nil)
-                               (icon-set :icons1)
-                               (lang :en)
-                               (content-type :json)
-                               (api-key nil))
+                                           (start-date nil)
+                                           (end-date nil)
+                                           (unit-group :metric)
+                                           include-hours
+                                           (elements nil)
+                                           (timezone nil)
+                                           (icon-set :icons1)
+                                           (lang :en)
+                                           (content-type :json)
+                                           (api-key nil))
   "Retrieve weather data for multiple locations in a single request.
 
   Parameters:
@@ -110,12 +110,12 @@
         response)))
 
 (defun current-conditions (location &key
-                           (unit-group :us)
-                           (elements nil)
-                           (timezone nil)
-                           (icon-set :icons1)
-                           (lang :en)
-                           (api-key nil))
+                                      (unit-group :metric)
+                                      (elements nil)
+                                      (timezone nil)
+                                      (icon-set :icons1)
+                                      (lang :en)
+                                      (api-key nil))
   "Get current weather conditions for a location.
 
   Parameters:
@@ -145,15 +145,15 @@
                    :api-key api-key))
 
 (defun forecast-weather (location &key
-                         (days 15)
-                         (unit-group :us)
-                         (include-hours t)
-                         (include-alerts t)
-                         (elements nil)
-                         (timezone nil)
-                         (icon-set :icons1)
-                         (lang :en)
-                         (api-key nil))
+                                    (days 15)
+                                    (unit-group :metric)
+                                    include-hours
+                                    include-alerts
+                                    (elements nil)
+                                    (timezone nil)
+                                    (icon-set :icons1)
+                                    (lang :en)
+                                    (api-key nil))
   "Get weather forecast for a location.
 
   Parameters:
@@ -189,14 +189,14 @@
                      :api-key api-key)))
 
 (defun historical-weather (location start-date &key
-                           (end-date nil)
-                           (unit-group :us)
-                           (include-hours t)
-                           (elements nil)
-                           (timezone nil)
-                           (icon-set :icons1)
-                           (lang :en)
-                           (api-key nil))
+                                                 (end-date nil)
+                                                 (unit-group :metric)
+                                                 include-hours
+                                                 (elements nil)
+                                                 (timezone nil)
+                                                 (icon-set :icons1)
+                                                 (lang :en)
+                                                 (api-key nil))
   "Get historical weather data for a location.
 
   Parameters:
