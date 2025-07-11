@@ -106,7 +106,7 @@
                    :content-type content-type)))
 
     (if (eq content-type :json)
-        (visualcrossing/data:parse-weather-response response)
+        (visualcrossing/data:parse-weather-multi-response response)
         response)))
 
 (defun current-conditions (location &key

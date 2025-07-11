@@ -23,7 +23,7 @@
         (ok (string= (get-api-key "provided-key") "provided-key"))))
 
     (testing "No API key available"
-      (with-test-api-key ("")
+      (with-test-api-key (nil)
         (ok (signals (get-api-key) 'visualcrossing/errors:authentication-error))))))
 
 (deftest build-url-test

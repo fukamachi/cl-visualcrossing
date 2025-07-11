@@ -37,7 +37,7 @@
 (deftest parameter-validation
   (testing "Parameter validation"
     (testing "Invalid API key results in error"
-      (with-test-api-key ("")
+      (with-test-api-key (nil)
         (ok (signals (current-conditions "New York, NY")
                 'visualcrossing/errors:authentication-error))))
 
@@ -72,7 +72,7 @@
 (deftest keyword-argument-handling
   (testing "Keyword argument handling"
     (testing "timeline-weather accepts all keyword arguments"
-      (with-test-api-key ("")
+      (with-test-api-key (nil)
         (ok (timeline-weather "New York, NY"
                               :start-date "2024-01-01"
                               :end-date "2024-01-07"
@@ -88,7 +88,7 @@
                               :api-key (uiop:getenv "TEST_VISUAL_CROSSING_WEATHER_API_KEY")))))
 
     (testing "current-conditions accepts keyword arguments"
-      (with-test-api-key ("")
+      (with-test-api-key (nil)
         (ok (current-conditions "New York, NY"
                                 :unit-group :metric
                                 :elements nil

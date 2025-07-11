@@ -15,14 +15,14 @@
   (testing "Weather response structure creation"
     (let ((response (data:make-weather-response
                      :query-cost 1
-                     :latitude 40.7146
-                     :longitude -74.0071
+                     :latitude 40.7146d0
+                     :longitude -74.0071d0
                      :resolved-address "New York, NY, United States"
                      :address "New York, NY"
                      :timezone "America/New_York")))
       (ok (= (data:weather-response-query-cost response) 1))
-      (ok (= (data:weather-response-latitude response) 40.7146))
-      (ok (= (data:weather-response-longitude response) -74.0071))
+      (ok (= (data:weather-response-latitude response) 40.7146d0))
+      (ok (= (data:weather-response-longitude response) -74.0071d0))
       (ok (string= (data:weather-response-resolved-address response) "New York, NY, United States"))
       (ok (string= (data:weather-response-address response) "New York, NY"))
       (ok (string= (data:weather-response-timezone response) "America/New_York")))))
@@ -31,19 +31,20 @@
   (testing "Weather day structure creation"
     (let ((day (data:make-weather-day
                 :datetime "2025-07-08"
-                :temp 84.5
-                :tempmax 94.4
-                :tempmin 77.2
-                :humidity 65.9
-                :precip 0.028
+                :datetime-epoch 1751932800
+                :temp 84.5d0
+                :tempmax 94.4d0
+                :tempmin 77.2d0
+                :humidity 65.9d0
+                :precip 0.028d0
                 :conditions "Partly cloudy"
                 :description "Partly cloudy throughout the day.")))
       (ok (string= (data:weather-datetime day) "2025-07-08"))
-      (ok (= (data:weather-temp day) 84.5))
-      (ok (= (data:weather-day-tempmax day) 94.4))
-      (ok (= (data:weather-day-tempmin day) 77.2))
-      (ok (= (data:weather-humidity day) 65.9))
-      (ok (= (data:weather-precip day) 0.028))
+      (ok (= (data:weather-temp day) 84.5d0))
+      (ok (= (data:weather-day-tempmax day) 94.4d0))
+      (ok (= (data:weather-day-tempmin day) 77.2d0))
+      (ok (= (data:weather-humidity day) 65.9d0))
+      (ok (= (data:weather-precip day) 0.028d0))
       (ok (string= (data:weather-conditions day) "Partly cloudy"))
       (ok (string= (data:weather-description day) "Partly cloudy throughout the day.")))))
 
@@ -51,15 +52,16 @@
   (testing "Weather hour structure creation"
     (let ((hour (data:make-weather-hour
                  :datetime "00:00:00"
-                 :temp 79.5
-                 :humidity 68.0
-                 :precip 0.0
+                 :datetime-epoch 1751932800
+                 :temp 79.5d0
+                 :humidity 68.0d0
+                 :precip 0.0d0
                  :conditions "Partly cloudy"
                  :description "Clear sky")))
       (ok (string= (data:weather-datetime hour) "00:00:00"))
-      (ok (= (data:weather-temp hour) 79.5))
-      (ok (= (data:weather-humidity hour) 68.0))
-      (ok (= (data:weather-precip hour) 0.0))
+      (ok (= (data:weather-temp hour) 79.5d0))
+      (ok (= (data:weather-humidity hour) 68.0d0))
+      (ok (= (data:weather-precip hour) 0.0d0))
       (ok (string= (data:weather-conditions hour) "Partly cloudy"))
       (ok (string= (data:weather-description hour) "Clear sky")))))
 
@@ -67,15 +69,16 @@
   (testing "Current conditions structure creation"
     (let ((current (data:make-current-conditions
                     :datetime "15:21:00"
-                    :temp 89.8
-                    :humidity 59.0
-                    :precip 0.0
+                    :datetime-epoch 1751988060
+                    :temp 89.8d0
+                    :humidity 59.0d0
+                    :precip 0.0d0
                     :conditions "Partly cloudy"
                     :description "Current conditions")))
       (ok (string= (data:weather-datetime current) "15:21:00"))
-      (ok (= (data:weather-temp current) 89.8))
-      (ok (= (data:weather-humidity current) 59.0))
-      (ok (= (data:weather-precip current) 0.0))
+      (ok (= (data:weather-temp current) 89.8d0))
+      (ok (= (data:weather-humidity current) 59.0d0))
+      (ok (= (data:weather-precip current) 0.0d0))
       (ok (string= (data:weather-conditions current) "Partly cloudy"))
       (ok (string= (data:weather-description current) "Current conditions")))))
 

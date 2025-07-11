@@ -5,9 +5,11 @@
   (:export #:with-test-api-key))
 (in-package #:visualcrossing/tests/utils)
 
-(defmacro with-test-api-key ((&optional api-key) &body body)
+(defmacro with-test-api-key ((&optional (api-key nil api-key-specified-p)) &body body)
   (let ((original-key (gensym "ORIGINAL-KEY")))
-    `(let ((*api-key* ,(or api-key '(uiop:getenv "TEST_VISUAL_CROSSING_WEATHER_API_KEY"))))
+    `(let ((*api-key* ,(if api-key-specified-p
+                           api-key
+                           '(uiop:getenv "TEST_VISUAL_CROSSING_WEATHER_API_KEY"))))
        (let ((,original-key (uiop:getenv "VISUAL_CROSSING_WEATHER_API_KEY")))
          (unwind-protect
               (progn
