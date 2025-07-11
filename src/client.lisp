@@ -7,6 +7,7 @@
            #:*timeout*
            #:*retry-attempts*
            #:*retry-delay*
+           #:*user-agent*
            #:get-api-key
            #:build-url
            #:make-request
@@ -14,20 +15,24 @@
            #:make-multi-timeline-request))
 (in-package #:visualcrossing/client)
 
-(defparameter *api-key* nil
+(defvar *api-key* nil
   "Visual Crossing Weather API key")
 
 (defparameter *base-url* "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
   "Base URL for Visual Crossing Timeline API")
 
-(defparameter *timeout* 5
+(defvar *timeout* 5
   "Request timeout in seconds")
 
-(defparameter *retry-attempts* 3
+(defvar *retry-attempts* 3
   "Number of retry attempts for failed requests")
 
-(defparameter *retry-delay* 1
+(defvar *retry-delay* 1
   "Initial delay between retries in seconds")
+
+(defvar *user-agent*
+  (format nil "visualcrossing/~A"
+          (asdf:component-version (asdf:find-system :visualcrossing))))
 
 (defun get-api-key (&optional provided-key)
   "Get API key from parameter, dynamic variable, or environment variable."
@@ -87,7 +92,7 @@
          (full-url (if query-string
                       (format nil "~A?~A" url query-string)
                       url))
-         (headers '(("User-Agent" . "visualcrossing/0.1.0"))))
+         (headers `(("User-Agent" . ,*user-agent*))))
 
     (multiple-value-bind (body status-code response-headers)
         (make-request-with-retry full-url
